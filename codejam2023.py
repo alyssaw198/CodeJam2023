@@ -11,6 +11,7 @@ client_id = 'sillygooses01'
 username = 'CodeJamUser'
 password = '123CodeJam'
 trucks = {}
+loads = {}
 
 class Truck:
     def __init__(self, truck_id, latitude, longitude, equip_type, trip_pref):
@@ -21,11 +22,9 @@ class Truck:
         self.trip_pref = trip_pref
         #dict of load objects
 
-    def update(self, latitude, longitude, equip_type, trip_pref):
+    def update(self, latitude, longitude):
         self.latitude = latitude
         self.longitude = longitude
-        self.equip_type = equip_type
-        self.trip_pref = trip_pref
         #be able to update this truck's distance to EACH of the possible loads
         #if a load is within the truck's radius
         #run another function that checks if delivering this load is within the trucker's preferences AND within the trucker's cost
@@ -34,7 +33,20 @@ class Truck:
 
     def __str__(self):
         return f"Truck ID: {self.truck_id}, Position: ({self.latitude}, {self.longitude}), Equipment Type: {self.equip_type}, Trip Preference: {self.trip_pref}"
-    
+
+class Load: 
+    def __init__(self, load_id, originLat, originLong, destLat, destLong, type, pay, mileage):
+        self.load_id = load_id
+        self.originLat = originLat
+        self.originLong = originLong
+        self.destLat = destLat
+        self.destLong = destLong
+        self.type = type
+        self.pay = pay
+        self.mileage = mileage
+    def __str__(self):
+        return f"Load ID: {self.load_id}, Origin: ({self.originLat}, {self.originLong}), Destination: ({self.destLat}, {self.destLong}), Equipment Type: {self.type}, Pay: {self.pay}, Mileage: {self.mileage}"
+        
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
@@ -58,7 +70,7 @@ def on_message(client, userdata, message):
             truck_id = data['truckId']
             if truck_id in trucks:
                 # Update existing truck
-                trucks[truck_id].update(data['positionLatitude'], data['positionLongitude'], data['equipType'], data['nextTripLengthPreference'])
+                trucks[truck_id].update(data['positionLatitude'], data['positionLongitude'])
             else:
                 # Create new truck
                 trucks[truck_id] = Truck(truck_id, data['positionLatitude'], data['positionLongitude'], data['equipType'], data['nextTripLengthPreference'])
@@ -66,7 +78,12 @@ def on_message(client, userdata, message):
             print(trucks[truck_id])  # Print the updated truck information
 
         # Handle 'Load' type messages if needed
-
+        if data["type"] == "Load":
+            load_id = data['loadId']
+            loads[load_id] = Load(load_id, data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage'])
+            
+            print(loads[load_id])
+            
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
 
@@ -88,6 +105,8 @@ def run():
     print("\nAll Trucks Data:")
     for truck_id, truck in trucks.items():
         print(truck)
-
+    print("\nAll Load Data:")
+    for load_id, load in loads.items():
+        print(load)
 if __name__ == '__main__':
     run()
