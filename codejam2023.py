@@ -1,9 +1,11 @@
-import random
 import time
 import json
 import threading
-import geopy.distance
 from paho.mqtt import client as mqtt_client
+from pyqtree import Index
+import geopy.distance
+from truck import Truck
+from load import Load
 
 broker = 'fortuitous-welder.cloudmqtt.com'
 port = 1883
@@ -11,45 +13,14 @@ topic = "CodeJam"
 client_id = 'sillygooses01'
 username = 'CodeJamUser'
 password = '123CodeJam'
-trucks = {}
-loads = {}
 
-class Truck:
-    def __init__(self, truck_id, latitude, longitude, equip_type, trip_pref):
-        self.truck_id = truck_id
-        self.latitude = latitude
-        self.longitude = longitude
-        self.equip_type = equip_type
-        self.trip_pref = trip_pref
-        #dict of load objects
-
-    def update(self, latitude, longitude):
-        self.latitude = latitude
-        self.longitude = longitude
-        #be able to update this truck's distance to EACH of the possible loads
-        #if a load is within the truck's radius
-        #run another function that checks if delivering this load is within the trucker's preferences AND within the trucker's cost
-        #match load with trucker and send notification if found good match
-        #if not continue 
-
-    def __str__(self):
-        return f"Truck ID: {self.truck_id}, Position: ({self.latitude}, {self.longitude}), Equipment Type: {self.equip_type}, Trip Preference: {self.trip_pref}"
-
-class Load: 
-    def __init__(self, load_id, originLat, originLong, destLat, destLong, type, pay, mileage):
-        self.load_id = load_id
-        self.originLat = originLat
-        self.originLong = originLong
-        self.destLat = destLat
-        self.destLong = destLong
-        self.type = type
-        self.pay = pay
-        self.mileage = mileage
-    
-    def __str__(self):
-        return f"Load ID: {self.load_id}, Origin: ({self.originLat}, {self.originLong}), Destination: ({self.destLat}, {self.destLong}), Equipment Type: {self.type}, Pay: {self.pay}, Mileage: {self.mileage}"
+#set up the spatial index for trucks and loads
+trucks = Index(bbox=[-180, -90, 180, 90]) #Latitude, Longitude
+loads = Index(bbox=[-180, -90, 180, 90])
         
 def connect_mqtt():
+    '''Connect to mqtt network to recieve messages
+    '''
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -64,64 +35,106 @@ def connect_mqtt():
     client.connect(broker, port)
     return client
 
-def on_message(client, userdata, message):
+def update_position(data):
+    '''Updates the location of the entity in the space and checks if there is an available trucker-load match
+    '''
+    if data["type"] == "Truck":
+        load_match, profit = check_loads(data['nextTripLengthPreference'], data['equipType'], data['positionLongitude'], data['positionLatitude'])
+
+        if load_match:
+            print("Load:", load_match.load_id, "Truck:", data['truckId'], "Earn:", profit)
+            #send notification - return BOOL for if accepted or not
+            #if accepted, remove load from loads spatial index
+            accepted = True
+            if accepted:
+                loads.remove(item=load_match, bbox=(load_match.originLat, load_match.originLong, load_match.originLat, load_match.originLong))
+        else:
+            #truck did not find a match, save to spatial index
+            trucks.insert(item=Truck(data['truckId'], data['positionLatitude'], data['positionLongitude'], data['equipType'], data['nextTripLengthPreference']), bbox=(data['positionLatitude'], data['positionLongitude'], data['positionLatitude'], data['positionLongitude']))
+    
+    else:
+        distance = geopy.distance.geodesic((data['originLatitude'], data['originLongitude']), (data['destinationLatitude'], data['destinationLongitude'])).miles
+        truck_match, profit = check_trucks(data['price'], distance, type, data['originLongitude'], data['originLatitude'])
+
+        if truck_match:
+            print("Truck:", truck_match.truck_id, "Load:", data['loadId'], "Earn:", profit)
+            #send notification - return BOOL for if accepted or not
+            #if accepted, remove trucker from trucks spatial index
+            accepted = True
+            if accepted:
+                trucks.remove(item=truck_match, bbox=(truck_match.latitude, truck_match.longitude, truck_match.latitude, truck_match.longitude))
+        else:
+            #load did not find a match, save to the spatial index
+            loads.insert(item=Load(data['loadId'], data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage']), bbox=(data['originLatitude'], data['originLongitude'], data['originLatitude'], data['originLongitude']))
+
+def check_loads(preference, type, longitude, latitude): #input is truck info
+    '''Check any loads nearby if we get a truck update
+
+    Args:
+        preference: String representing the trucker's drive preference
+        type: String representing the type of load the trucker is able to carry
+        longitude: Float representing the longitude location of the truck
+        latitude: Float representing the latitude location of the truck
+
+    Returns:
+        load_match: Load object that is the optimal load for that trucker
+        max_price: Float that represents the profit of the driver
+    '''
+    search_box = (
+        latitude - 100,
+        longitude - 100,
+        latitude + 100,
+        longitude + 100
+    )
+    load_match = None
+    max_price = 0
+
+    for load in loads.intersect(search_box):
+        if type == load.type and (load.total_dist >= 200 and preference == "Long") or (load.total_dist < 200 and preference == "Short"):
+            pay = load.pay - (1.38 * (load.mileage + geopy.distance.geodesic((load.originLat, load.originLong), (latitude, longitude)).miles))
+            if pay > max_price:
+                load_match = load
+                max_price = pay
+    return load_match, max_price
+
+def check_trucks(pay, distance, type, longitude, latitude): #input is load info
+    '''Check if there are any trucks nearby if we recieve a load
+
+    Args:
+        pay: Float that represents how much the driver can earn from this load
+        distance: Float representing the distance the load needs to be brought
+        type: String representing the type of load
+        longitude: Float representing the longitude location of the load
+        latitude: Float representing the latitude location of the load
+
+    Returns:
+        truck_match: Truck object that is the optimal load for that trucker
+        max_price: Float that represents the profit of the driver
+    '''
+    search_box = (
+        latitude - 100,
+        longitude - 100,
+        latitude + 100,
+        longitude + 100
+    )
+    truck_match = None
+    max_price = 0
+
+    for truck in trucks.intersect(search_box):
+        if type == truck.equip_type and (distance >= 200 and truck.trip_pref == "Long") or (distance < 200 and truck.trip_pref == "Short"):
+            pay = pay - (1.38 * (distance + geopy.distance.geodesic((truck.latitude, truck.longitude), (latitude, longitude)).miles))
+            if pay > max_price:
+                truck_match = truck
+                max_price = pay
+    return truck_match, max_price
+
+def on_message(client, userdata, message): 
+    '''Run when an update is recieved
+    '''
     try:
         data = json.loads(message.payload.decode())
-
-        if data["type"] == "Load":
-            load_id = data['loadId']
-            loads[load_id] = Load(load_id, data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage'])
-            load_start = (loads[load_id].originLat, loads[load_id].originLong)
-            load_end = (loads[load_id].destLat, loads[load_id].destLong)
-            valid_trucks = {}
-            for truck_id, truck in trucks.items():
-                truck_start = (truck.latitude, truck.longitude)
-                if truck.equip_type == loads[load_id].type:
-                    truck_distance_to_load = geopy.distance.geodesic(load_start, truck_start).miles
-                    if truck_distance_to_load <= 100:
-                        load_distance = geopy.distance.geodesic(load_start, load_end).miles
-                        if (load_distance >= 200 and truck.trip_pref == "Long") or (load_distance < 200 and truck.trip_pref == "Short"): 
-                            valid_trucks[truck_id] = loads[load_id].pay - (1.38 * (loads[load_id].mileage + truck_distance_to_load))
-            if valid_trucks:
-                max_pay_truck_id = max(valid_trucks, key=valid_trucks.get)
-                max_pay = valid_trucks[max_pay_truck_id]
-                if max_pay < 0:
-                    print("We don't work for nothing or pay to work.")
-                else:
-                    print("Truck ID:", max_pay_truck_id, "Load ID:", load_id, "Max Pay:", max_pay)      
-        if data["type"] == "Truck":
-            truck_id = data['truckId']
-            valid_loads = {}
-            if truck_id in trucks:
-                # Update existing truck
-                trucks[truck_id].update(data['positionLatitude'], data['positionLongitude'])
-            else:
-                # Create new truck
-                trucks[truck_id] = Truck(truck_id, data['positionLatitude'], data['positionLongitude'], data['equipType'], data['nextTripLengthPreference'])
-            for load_id, load in loads.items():
-                load_start = (load.originLat, load.originLong)
-                load_end = (load.destLat, load.destLong)
-                truck_cord = (trucks[truck_id].latitude, trucks[truck_id].longitude)
-                if trucks[truck_id].equip_type == load.type:
-                    truck_distance_to_load = geopy.distance.geodesic(load_start, truck_cord).miles
-                    if truck_distance_to_load <= 100:
-                        load_distance = geopy.distance.geodesic(load_start, load_end).miles
-                        if (load_distance >= 200 and trucks[truck_id].trip_pref == "Long") or (load_distance < 200 and trucks[truck_id].trip_pref == "Short"): 
-                            valid_loads[load.load_id] = load.pay - (1.38 * (load.mileage + truck_distance_to_load))
-        
-            #print(trucks[truck_id])  # Print the updated truck information
-            if valid_loads:
-                max_pay_load_id = max(valid_loads, key=valid_loads.get)
-                max_pay = valid_loads[max_pay_load_id]
-                if max_pay < 0:
-                    print("We don't work for nothing or pay to work.")
-                else:
-                    print("Truck ID:", truck_id, "Load ID:", max_pay_load_id, "Max Pay:", max_pay)
-         
-
-            
-            #print(loads[load_id])
-            
+        update_position(data)
+                        
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
 
@@ -138,12 +151,6 @@ def run():
             time.sleep(1)  # Keep the script alive
     except KeyboardInterrupt:
         client.loop_stop()  # Stop the loop on interruption
-
-    # Print the entire trucks dictionary
-    print("\nTotal Trucks:")
-    print(len(trucks.items()))
-    print("\nTotal Loads:")
-    print(len(loads.items()))
     
 if __name__ == '__main__':
     run()
