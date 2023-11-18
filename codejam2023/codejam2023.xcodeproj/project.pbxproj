@@ -1,0 +1,609 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DA68D9262B093A7D00AC7615 /* codejam2023App.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68D9252B093A7D00AC7615 /* codejam2023App.swift */; };
+		DA68D9282B093A7D00AC7615 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68D9272B093A7D00AC7615 /* ContentView.swift */; };
+		DA68D92A2B093A8000AC7615 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA68D9292B093A8000AC7615 /* Assets.xcassets */; };
+		DA68D92E2B093A8000AC7615 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA68D92D2B093A8000AC7615 /* Preview Assets.xcassets */; };
+		DA68D9382B093A8000AC7615 /* codejam2023Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68D9372B093A8000AC7615 /* codejam2023Tests.swift */; };
+		DA68D9422B093A8100AC7615 /* codejam2023UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68D9412B093A8100AC7615 /* codejam2023UITests.swift */; };
+		DA68D9442B093A8100AC7615 /* codejam2023UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68D9432B093A8100AC7615 /* codejam2023UITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA68D9342B093A8000AC7615 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA68D91A2B093A7D00AC7615 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA68D9212B093A7D00AC7615;
+			remoteInfo = codejam2023;
+		};
+		DA68D93E2B093A8100AC7615 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA68D91A2B093A7D00AC7615 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA68D9212B093A7D00AC7615;
+			remoteInfo = codejam2023;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DA68D9222B093A7D00AC7615 /* codejam2023.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = codejam2023.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA68D9252B093A7D00AC7615 /* codejam2023App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = codejam2023App.swift; sourceTree = "<group>"; };
+		DA68D9272B093A7D00AC7615 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DA68D9292B093A8000AC7615 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DA68D92B2B093A8000AC7615 /* codejam2023.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = codejam2023.entitlements; sourceTree = "<group>"; };
+		DA68D92D2B093A8000AC7615 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		DA68D9332B093A8000AC7615 /* codejam2023Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = codejam2023Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA68D9372B093A8000AC7615 /* codejam2023Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = codejam2023Tests.swift; sourceTree = "<group>"; };
+		DA68D93D2B093A8100AC7615 /* codejam2023UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = codejam2023UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA68D9412B093A8100AC7615 /* codejam2023UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = codejam2023UITests.swift; sourceTree = "<group>"; };
+		DA68D9432B093A8100AC7615 /* codejam2023UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = codejam2023UITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DA68D91F2B093A7D00AC7615 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA68D9302B093A8000AC7615 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA68D93A2B093A8100AC7615 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DA68D9192B093A7D00AC7615 = {
+			isa = PBXGroup;
+			children = (
+				DA68D9242B093A7D00AC7615 /* codejam2023 */,
+				DA68D9362B093A8000AC7615 /* codejam2023Tests */,
+				DA68D9402B093A8100AC7615 /* codejam2023UITests */,
+				DA68D9232B093A7D00AC7615 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DA68D9232B093A7D00AC7615 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA68D9222B093A7D00AC7615 /* codejam2023.app */,
+				DA68D9332B093A8000AC7615 /* codejam2023Tests.xctest */,
+				DA68D93D2B093A8100AC7615 /* codejam2023UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DA68D9242B093A7D00AC7615 /* codejam2023 */ = {
+			isa = PBXGroup;
+			children = (
+				DA68D9252B093A7D00AC7615 /* codejam2023App.swift */,
+				DA68D9272B093A7D00AC7615 /* ContentView.swift */,
+				DA68D9292B093A8000AC7615 /* Assets.xcassets */,
+				DA68D92B2B093A8000AC7615 /* codejam2023.entitlements */,
+				DA68D92C2B093A8000AC7615 /* Preview Content */,
+			);
+			path = codejam2023;
+			sourceTree = "<group>";
+		};
+		DA68D92C2B093A8000AC7615 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				DA68D92D2B093A8000AC7615 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		DA68D9362B093A8000AC7615 /* codejam2023Tests */ = {
+			isa = PBXGroup;
+			children = (
+				DA68D9372B093A8000AC7615 /* codejam2023Tests.swift */,
+			);
+			path = codejam2023Tests;
+			sourceTree = "<group>";
+		};
+		DA68D9402B093A8100AC7615 /* codejam2023UITests */ = {
+			isa = PBXGroup;
+			children = (
+				DA68D9412B093A8100AC7615 /* codejam2023UITests.swift */,
+				DA68D9432B093A8100AC7615 /* codejam2023UITestsLaunchTests.swift */,
+			);
+			path = codejam2023UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DA68D9212B093A7D00AC7615 /* codejam2023 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA68D9472B093A8100AC7615 /* Build configuration list for PBXNativeTarget "codejam2023" */;
+			buildPhases = (
+				DA68D91E2B093A7D00AC7615 /* Sources */,
+				DA68D91F2B093A7D00AC7615 /* Frameworks */,
+				DA68D9202B093A7D00AC7615 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = codejam2023;
+			productName = codejam2023;
+			productReference = DA68D9222B093A7D00AC7615 /* codejam2023.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DA68D9322B093A8000AC7615 /* codejam2023Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA68D94A2B093A8100AC7615 /* Build configuration list for PBXNativeTarget "codejam2023Tests" */;
+			buildPhases = (
+				DA68D92F2B093A8000AC7615 /* Sources */,
+				DA68D9302B093A8000AC7615 /* Frameworks */,
+				DA68D9312B093A8000AC7615 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA68D9352B093A8000AC7615 /* PBXTargetDependency */,
+			);
+			name = codejam2023Tests;
+			productName = codejam2023Tests;
+			productReference = DA68D9332B093A8000AC7615 /* codejam2023Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DA68D93C2B093A8100AC7615 /* codejam2023UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA68D94D2B093A8100AC7615 /* Build configuration list for PBXNativeTarget "codejam2023UITests" */;
+			buildPhases = (
+				DA68D9392B093A8100AC7615 /* Sources */,
+				DA68D93A2B093A8100AC7615 /* Frameworks */,
+				DA68D93B2B093A8100AC7615 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA68D93F2B093A8100AC7615 /* PBXTargetDependency */,
+			);
+			name = codejam2023UITests;
+			productName = codejam2023UITests;
+			productReference = DA68D93D2B093A8100AC7615 /* codejam2023UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DA68D91A2B093A7D00AC7615 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					DA68D9212B093A7D00AC7615 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					DA68D9322B093A8000AC7615 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = DA68D9212B093A7D00AC7615;
+					};
+					DA68D93C2B093A8100AC7615 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = DA68D9212B093A7D00AC7615;
+					};
+				};
+			};
+			buildConfigurationList = DA68D91D2B093A7D00AC7615 /* Build configuration list for PBXProject "codejam2023" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DA68D9192B093A7D00AC7615;
+			productRefGroup = DA68D9232B093A7D00AC7615 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DA68D9212B093A7D00AC7615 /* codejam2023 */,
+				DA68D9322B093A8000AC7615 /* codejam2023Tests */,
+				DA68D93C2B093A8100AC7615 /* codejam2023UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DA68D9202B093A7D00AC7615 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA68D92E2B093A8000AC7615 /* Preview Assets.xcassets in Resources */,
+				DA68D92A2B093A8000AC7615 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA68D9312B093A8000AC7615 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA68D93B2B093A8100AC7615 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DA68D91E2B093A7D00AC7615 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA68D9282B093A7D00AC7615 /* ContentView.swift in Sources */,
+				DA68D9262B093A7D00AC7615 /* codejam2023App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA68D92F2B093A8000AC7615 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA68D9382B093A8000AC7615 /* codejam2023Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA68D9392B093A8100AC7615 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA68D9422B093A8100AC7615 /* codejam2023UITests.swift in Sources */,
+				DA68D9442B093A8100AC7615 /* codejam2023UITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA68D9352B093A8000AC7615 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA68D9212B093A7D00AC7615 /* codejam2023 */;
+			targetProxy = DA68D9342B093A8000AC7615 /* PBXContainerItemProxy */;
+		};
+		DA68D93F2B093A8100AC7615 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA68D9212B093A7D00AC7615 /* codejam2023 */;
+			targetProxy = DA68D93E2B093A8100AC7615 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DA68D9452B093A8100AC7615 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DA68D9462B093A8100AC7615 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		DA68D9482B093A8100AC7615 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = codejam2023/codejam2023.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"codejam2023/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "silly-gooses.codejam2023";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DA68D9492B093A8100AC7615 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = codejam2023/codejam2023.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"codejam2023/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "silly-gooses.codejam2023";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DA68D94B2B093A8100AC7615 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "silly-gooses.codejam2023Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/codejam2023.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/codejam2023";
+			};
+			name = Debug;
+		};
+		DA68D94C2B093A8100AC7615 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "silly-gooses.codejam2023Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/codejam2023.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/codejam2023";
+			};
+			name = Release;
+		};
+		DA68D94E2B093A8100AC7615 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "silly-gooses.codejam2023UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = codejam2023;
+			};
+			name = Debug;
+		};
+		DA68D94F2B093A8100AC7615 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "silly-gooses.codejam2023UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = codejam2023;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DA68D91D2B093A7D00AC7615 /* Build configuration list for PBXProject "codejam2023" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA68D9452B093A8100AC7615 /* Debug */,
+				DA68D9462B093A8100AC7615 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA68D9472B093A8100AC7615 /* Build configuration list for PBXNativeTarget "codejam2023" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA68D9482B093A8100AC7615 /* Debug */,
+				DA68D9492B093A8100AC7615 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA68D94A2B093A8100AC7615 /* Build configuration list for PBXNativeTarget "codejam2023Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA68D94B2B093A8100AC7615 /* Debug */,
+				DA68D94C2B093A8100AC7615 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA68D94D2B093A8100AC7615 /* Build configuration list for PBXNativeTarget "codejam2023UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA68D94E2B093A8100AC7615 /* Debug */,
+				DA68D94F2B093A8100AC7615 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DA68D91A2B093A7D00AC7615 /* Project object */;
+}
