@@ -46,6 +46,7 @@ def update_position(data):
             #send notification - return BOOL for if accepted or not
             #if accepted, remove load from loads spatial index
             accepted = True
+            #need to specify time limit for answer
             if accepted:
                 loads.remove(item=load_match, bbox=(load_match.originLat, load_match.originLong, load_match.originLat, load_match.originLong))
         else:
@@ -58,7 +59,7 @@ def update_position(data):
 
         if truck_match:
             print("Truck:", truck_match.truck_id, "Load:", data['loadId'], "Earn:", profit)
-            #send notification - return BOOL for if accepted or not
+            #send notification with TIMESTAMP - return BOOL for if accepted or not
             #if accepted, remove trucker from trucks spatial index
             accepted = True
             if accepted:
