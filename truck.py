@@ -5,6 +5,8 @@ class Truck:
         self.longitude = longitude
         self.equip_type = equip_type
         self.trip_pref = trip_pref
+        #another property that says the last timestamp this truck recieved a notification, make sure we don't spam a trucker
+        self.last_noti = None
 
     def update(self, latitude, longitude):
         self.latitude = latitude

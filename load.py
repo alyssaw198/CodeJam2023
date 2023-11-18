@@ -1,13 +1,13 @@
 import geopy.distance
 
 class Load: 
-    def __init__(self, load_id, originLat, originLong, destLat, destLong, type, pay, mileage):
+    def __init__(self, load_id, originLat, originLong, destLat, destLong, type_equip, pay, mileage):
         self.load_id = load_id
         self.originLat = originLat
         self.originLong = originLong
         self.destLat = destLat
         self.destLong = destLong
-        self.type = type
+        self.type = type_equip
         self.pay = pay
         self.mileage = mileage
         self.total_dist = geopy.distance.geodesic((originLat, originLong), (destLat, destLong)).miles
