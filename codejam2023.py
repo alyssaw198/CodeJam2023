@@ -2,6 +2,7 @@ import random
 import time
 import json
 import threading
+import geopy.distance
 from paho.mqtt import client as mqtt_client
 
 broker = 'fortuitous-welder.cloudmqtt.com'
@@ -44,6 +45,7 @@ class Load:
         self.type = type
         self.pay = pay
         self.mileage = mileage
+    
     def __str__(self):
         return f"Load ID: {self.load_id}, Origin: ({self.originLat}, {self.originLong}), Destination: ({self.destLat}, {self.destLong}), Equipment Type: {self.type}, Pay: {self.pay}, Mileage: {self.mileage}"
         
@@ -66,23 +68,59 @@ def on_message(client, userdata, message):
     try:
         data = json.loads(message.payload.decode())
 
+        if data["type"] == "Load":
+            load_id = data['loadId']
+            loads[load_id] = Load(load_id, data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage'])
+            load_start = (loads[load_id].originLat, loads[load_id].originLong)
+            load_end = (loads[load_id].destLat, loads[load_id].destLong)
+            valid_trucks = {}
+            for truck_id, truck in trucks.items():
+                truck_start = (truck.latitude, truck.longitude)
+                if truck.equip_type == loads[load_id].type:
+                    truck_distance_to_load = geopy.distance.geodesic(load_start, truck_start).miles
+                    if truck_distance_to_load <= 100:
+                        load_distance = geopy.distance.geodesic(load_start, load_end).miles
+                        if (load_distance >= 200 and truck.trip_pref == "Long") or (load_distance < 200 and truck.trip_pref == "Short"): 
+                            valid_trucks[truck_id] = loads[load_id].pay - (1.38 * (loads[load_id].mileage + truck_distance_to_load))
+            if valid_trucks:
+                max_pay_truck_id = max(valid_trucks, key=valid_trucks.get)
+                max_pay = valid_trucks[max_pay_truck_id]
+                if max_pay < 0:
+                    print("We don't work for nothing or pay to work.")
+                else:
+                    print("Truck ID:", max_pay_truck_id, "Load ID:", load_id, "Max Pay:", max_pay)      
         if data["type"] == "Truck":
             truck_id = data['truckId']
+            valid_loads = {}
             if truck_id in trucks:
                 # Update existing truck
                 trucks[truck_id].update(data['positionLatitude'], data['positionLongitude'])
             else:
                 # Create new truck
                 trucks[truck_id] = Truck(truck_id, data['positionLatitude'], data['positionLongitude'], data['equipType'], data['nextTripLengthPreference'])
-            
-            print(trucks[truck_id])  # Print the updated truck information
+            for load_id, load in loads.items():
+                load_start = (load.originLat, load.originLong)
+                load_end = (load.destLat, load.destLong)
+                truck_cord = (trucks[truck_id].latitude, trucks[truck_id].longitude)
+                if trucks[truck_id].equip_type == load.type:
+                    truck_distance_to_load = geopy.distance.geodesic(load_start, truck_cord).miles
+                    if truck_distance_to_load <= 100:
+                        load_distance = geopy.distance.geodesic(load_start, load_end).miles
+                        if (load_distance >= 200 and trucks[truck_id].trip_pref == "Long") or (load_distance < 200 and trucks[truck_id].trip_pref == "Short"): 
+                            valid_loads[load.load_id] = load.pay - (1.38 * (load.mileage + truck_distance_to_load))
+        
+            #print(trucks[truck_id])  # Print the updated truck information
+            if valid_loads:
+                max_pay_load_id = max(valid_loads, key=valid_loads.get)
+                max_pay = valid_loads[max_pay_load_id]
+                if max_pay < 0:
+                    print("We don't work for nothing or pay to work.")
+                else:
+                    print("Truck ID:", truck_id, "Load ID:", max_pay_load_id, "Max Pay:", max_pay)
+         
 
-        # Handle 'Load' type messages if needed
-        if data["type"] == "Load":
-            load_id = data['loadId']
-            loads[load_id] = Load(load_id, data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage'])
             
-            print(loads[load_id])
+            #print(loads[load_id])
             
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
@@ -102,11 +140,10 @@ def run():
         client.loop_stop()  # Stop the loop on interruption
 
     # Print the entire trucks dictionary
-    print("\nAll Trucks Data:")
-    for truck_id, truck in trucks.items():
-        print(truck)
-    print("\nAll Load Data:")
-    for load_id, load in loads.items():
-        print(load)
+    print("\nTotal Trucks:")
+    print(len(trucks.items()))
+    print("\nTotal Loads:")
+    print(len(loads.items()))
+    
 if __name__ == '__main__':
     run()
