@@ -14,30 +14,18 @@ topic = "CodeJam"
 client_id = 'sillygooses01'
 username = 'CodeJamUser'
 password = '123CodeJam'
+STOP_CODE = False
 
 #set up the spatial index for trucks and loads
 unique_trucks = {}
 trucks = Index(bbox=[-180, -90, 180, 90]) #Latitude, Longitude
 loads = Index(bbox=[-180, -90, 180, 90])
         
-def connect_mqtt():
-    '''Connect to mqtt network to recieve messages
-    '''
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Connected to MQTT Broker!")
-            client.subscribe(topic)  # Subscribe to the topic here
-        else:
-            print("Failed to connect, return code %d\n", rc)
 
-    client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
-    client.on_connect = on_connect
-    client.on_message = on_message  # Set the on_message callback
-    client.connect(broker, port)
-    return client
+def on_connect(client, userdata, flags, rc):
+    client.subscribe(topic)  # Subscribe to the topic here
 
-def update_position(data):
+def update_position(data, client):
     '''Updates the location of the entity in the space and checks if there is an available trucker-load match
     '''
     if data["type"] == "Truck":
@@ -96,6 +84,7 @@ def update_position(data):
         else:
             #load did not find a match, save to the spatial index
             loads.insert(item=Load(data["timestamp"], data['loadId'], data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage']), bbox=(data['originLatitude'], data['originLongitude'], data['originLatitude'], data['originLongitude']))
+
 
 def check_loads(preference, type, longitude, latitude, radius): #input is truck info
     '''Check any loads nearby if we get a truck update
@@ -171,56 +160,54 @@ def check_trucks(pay, distance, type, longitude, latitude, radius): #input is lo
                 max_price = pay
     return truck_match, max_price
 
-def find_waiting_loads(data):
-    '''Constanly runs to update the wait time of each of the loads that have not been taken
-    '''
-    search_box = (
-        -180,
-        -90,
-        180,
-        90
-    )
-    for load in loads.intersect(search_box):
+def waiting_loads(data):
+    for load in loads.intersect((-180, -90, 180, 90)):
         load.calculate_wait_time(data["timestamp"])
         if load.wait_time > 3600:
-            #if no truck has been able to pick up the load in one hour
-            #find the closest truck and notify them
+            #load has been waiting for an hour
+            #find the closest truck driver without any notifications, and notify them
+            for truck in trucks.nearest(bbox=(load.originLat, load.originLong, load.originLat, load.originLong), num_results=len(unique_trucks)):
+                if len(unique_trucks[truck.truck_id]) == 0:
+                    pay = pay - (1.38 * (load.total_dist + geopy.distance.geodesic((truck.latitude, truck.longitude), (load.originlLat, load.originLong)).miles))
+                    distance_from_package = round(geopy.distance.geodesic((data['originLatitude'], data['originLongitude']), (truck_match.latitude, truck_match.longitude)).miles,2)
+                    timestamp = load.recieved_at + load.wait_time
 
-
-            load.wait_time = 0 #notified a truck, reset wait time
-            print("THIS LOAD IS WAITING")
+                    truck_match.screen_activity(notification)
+                    truck_match.last_noti = timestamp
 
 def on_message(client, userdata, message): 
     '''Run when an update is recieved
     '''
-    try:
-        data = json.loads(message.payload.decode())
+    data = json.loads(message.payload.decode())
 
-        thread1 = threading.Thread(target=update_position(data))
-        thread2 = threading.Thread(target=find_waiting_loads(data))
-        thread1.start()
-        thread2.start()
-        thread1.join()
-        thread2.join()
-                        
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON: {e}")
+    if data["type"] == "End":
+        STOP_CODE = True
+        for truck in unique_trucks:
+            if unique_trucks[truck].notifications:
+                print(truck, ";", unique_trucks[truck].notifications)
+        client.disconnect()
 
 def run():
-    client = connect_mqtt()
+    client = mqtt_client.Client(client_id)
+    client.username_pw_set(username, password)
+    client.on_connect = on_connect
+    client.on_message = on_message  # Set the on_message callback
+    client.connect(broker, port)
     client.loop_start()
 
-    # Set a timer for 30 seconds to stop the loop
-    timer = threading.Timer(30.0, client.loop_stop)
+    '''# Set a timer for 30 seconds to stop the loop
+    timer = threading.Timer(120, client.loop_stop)
     timer.start()
 
     try:
         while timer.is_alive():
             time.sleep(1)  # Keep the script alive
     except KeyboardInterrupt:
-        client.loop_stop()  # Stop the loop on interruption
+        client.loop_stop()  # Stop the loop on interruption'''
+    
+    while not STOP_CODE:
+        time.sleep(1)
+    client.loop_stop()
     
 if __name__ == '__main__':
     run()
-    for truck in unique_trucks:
-        print(truck, ";", unique_trucks[truck].notifications)
