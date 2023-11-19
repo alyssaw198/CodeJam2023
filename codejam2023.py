@@ -25,7 +25,7 @@ loads = Index(bbox=[-180, -90, 180, 90])
 def on_connect(client, userdata, flags, rc):
     client.subscribe(topic)  # Subscribe to the topic here
 
-def update_position(data, client):
+def update_position(data):
     '''Updates the location of the entity in the space and checks if there is an available trucker-load match
     '''
     if data["type"] == "Truck":
@@ -55,7 +55,7 @@ def update_position(data, client):
                     unique_trucks[data['truckId']].screen_activity(notification)
 
                 unique_trucks[data['truckId']].last_noti = current_time
-                
+                print("For:", data['truckId'], ";", notification)
                 #send notification - return BOOL for if accepted or not
                 #if accepted, remove load from loads spatial index``
                 accepted = False
@@ -76,6 +76,8 @@ def update_position(data, client):
                     notification = "(" + str(data["timestamp"]) + ")" + " Load " + str(data['loadId']) + " for $" + str(round(profit,2)) + " ; Distance from Load: " + str(round(geopy.distance.geodesic((data['originLatitude'], data['originLongitude']), (truck_match.latitude, truck_match.longitude)).miles,2)) + " miles"
 
                     truck_match.screen_activity(notification)
+
+                print("For:", truck_match.truck_id, ";", notification)
 
                 truck_match.last_noti = current_time
                 accepted = False
@@ -185,7 +187,9 @@ def on_message(client, userdata, message):
         for truck in unique_trucks:
             if unique_trucks[truck].notifications:
                 print(truck, ";", unique_trucks[truck].notifications)
-        client.loop_stop()
+        #set up the spatial index for trucks and loads
+        client.loop_start()
+    update_position(data)
 
 def run():
     client = mqtt_client.Client(client_id)
@@ -207,7 +211,7 @@ def run():
     
     while not STOP_CODE:
         time.sleep(1)
-    client.loop_stop()
+    client.loop_start()
     
 if __name__ == '__main__':
     run()
