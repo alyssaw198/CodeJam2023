@@ -8,9 +8,16 @@ class Truck:
         #another property that says the last timestamp this truck recieved a notification, make sure we don't spam a trucker
         self.last_noti = None
 
+        #notification properties
+        self.notifications = []
+        self.waiting = False
+
     def update(self, latitude, longitude):
         self.latitude = latitude
         self.longitude = longitude
+    
+    def screen_activity(self, notification):
+        self.notifications.append(notification)
 
     def __str__(self):
         return f"Truck ID: {self.truck_id}, Position: ({self.latitude}, {self.longitude}), Equipment Type: {self.equip_type}, Trip Preference: {self.trip_pref}"

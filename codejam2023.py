@@ -54,14 +54,17 @@ def update_position(data):
 
             trucks.insert(item=unique_trucks[data['truckId']], bbox=(data['positionLatitude'], data['positionLongitude'], data['positionLatitude'], data['positionLongitude']))
 
-        load_match, profit = check_loads(data['nextTripLengthPreference'], data['equipType'], data['positionLongitude'], data['positionLatitude'])
+        load_match, profit = check_loads(data['nextTripLengthPreference'], data['equipType'], data['positionLongitude'], data['positionLatitude'], 100)
 
         if load_match:
             #convert the timestamp given to a datetime object
             current_time = datetime.strptime(data["timestamp"].split("T")[1], "%H:%M:%S")
             #check the last timestamp in which the truck recieved a notification before sending a new notification
             if not unique_trucks[data['truckId']].last_noti or (current_time - timedelta(seconds=60)) >= unique_trucks[data['truckId']].last_noti:
-                print("NOTIFICATION!!!", "Load:", load_match.load_id, "for Truck:", data['truckId'], "; Earn:", profit, "; Distance from Load:", geopy.distance.geodesic((data['positionLatitude'], data['positionLongitude']), (load_match.originLat, load_match.originLong)).miles, "; Notification Time:", data["timestamp"])
+                if not unique_trucks[data['truckId']].waiting:
+                    notification = "(" + str(data["timestamp"]) + ")" + " Load " + str(load_match.load_id) + " for $" + str(round(profit,2)) + " ; Distance from Load: " + str(round(geopy.distance.geodesic((data['positionLatitude'], data['positionLongitude']), (load_match.originLat, load_match.originLong)).miles,2)) + " miles"
+                    
+                    unique_trucks[data['truckId']].screen_activity(notification)
 
                 unique_trucks[data['truckId']].last_noti = current_time
                 
@@ -69,17 +72,22 @@ def update_position(data):
                 #if accepted, remove load from loads spatial index``
                 accepted = False
                 if accepted:
-                    loads.remove(item=load_match, bbox=(load_match.originLat, load_match.originLong, load_match.originLat, load_match.originLong))
+                    trucks.remove(item=unique_trucks[data['truckId']], bbox=(data['positionLatitude'], data['positionLongitude'], data['positionLatitude'], data['positionLongitude']))
+                loads.remove(item=load_match, bbox=(load_match.originLat, load_match.originLong, load_match.originLat, load_match.originLong))
     
+    #get a new load request
     elif data["type"] == "Load":
         distance = geopy.distance.geodesic((data['originLatitude'], data['originLongitude']), (data['destinationLatitude'], data['destinationLongitude'])).miles
-        truck_match, profit = check_trucks(data['price'], distance, data['equipmentType'], data['originLongitude'], data['originLatitude'])
+        truck_match, profit = check_trucks(data['price'], distance, data['equipmentType'], data['originLongitude'], data['originLatitude'], 100)
 
         if truck_match:
             current_time = datetime.strptime(data["timestamp"].split("T")[1], "%H:%M:%S") 
             #check the last timestamp in which the truck recieved a notification before sending a new notification 
             if not truck_match.last_noti or (current_time - timedelta(seconds=60)) >= truck_match.last_noti:
-                print("NOTIFICATION!!!", "Load:", data['loadId'], "for Truck:", truck_match.truck_id, "; Earn:", profit, "; Distance from Load:", geopy.distance.geodesic((data['originLatitude'], data['originLongitude']), (truck_match.latitude, truck_match.longitude)).miles, "Notification Time:", data["timestamp"])
+                if not truck_match.waiting:
+                    notification = "(" + str(data["timestamp"]) + ")" + " Load " + str(data['loadId']) + " for $" + str(round(profit,2)) + " ; Distance from Load: " + str(round(geopy.distance.geodesic((data['originLatitude'], data['originLongitude']), (truck_match.latitude, truck_match.longitude)).miles,2)) + " miles"
+
+                    truck_match.screen_activity(notification)
 
                 truck_match.last_noti = current_time
                 accepted = False
@@ -87,9 +95,9 @@ def update_position(data):
                     trucks.remove(item=truck_match, bbox=(truck_match.latitude, truck_match.longitude, truck_match.latitude, truck_match.longitude))
         else:
             #load did not find a match, save to the spatial index
-            loads.insert(item=Load(data['loadId'], data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage']), bbox=(data['originLatitude'], data['originLongitude'], data['originLatitude'], data['originLongitude']))
+            loads.insert(item=Load(data["timestamp"], data['loadId'], data['originLatitude'], data['originLongitude'], data['destinationLatitude'], data['destinationLongitude'], data['equipmentType'], data['price'], data['mileage']), bbox=(data['originLatitude'], data['originLongitude'], data['originLatitude'], data['originLongitude']))
 
-def check_loads(preference, type, longitude, latitude): #input is truck info
+def check_loads(preference, type, longitude, latitude, radius): #input is truck info
     '''Check any loads nearby if we get a truck update
 
     Args:
@@ -105,8 +113,6 @@ def check_loads(preference, type, longitude, latitude): #input is truck info
 
     lat_degree_distance = geopy.distance.geodesic((latitude, longitude), (latitude + 1, longitude)).miles
     lon_degree_distance = geopy.distance.geodesic((latitude, longitude), (latitude, longitude + 1)).miles
-
-    radius = 100
 
     latitude_delta = radius / lat_degree_distance
     longitude_delta = radius / lon_degree_distance
@@ -128,7 +134,7 @@ def check_loads(preference, type, longitude, latitude): #input is truck info
                 max_price = pay
     return load_match, max_price
 
-def check_trucks(pay, distance, type, longitude, latitude): #input is load info
+def check_trucks(pay, distance, type, longitude, latitude, radius): #input is load info
     '''Check if there are any trucks nearby if we recieve a load
 
     Args:
@@ -144,8 +150,6 @@ def check_trucks(pay, distance, type, longitude, latitude): #input is load info
     '''
     lat_degree_distance = geopy.distance.geodesic((latitude, longitude), (latitude + 1, longitude)).miles
     lon_degree_distance = geopy.distance.geodesic((latitude, longitude), (latitude, longitude + 1)).miles
-
-    radius = 100
 
     latitude_delta = radius / lat_degree_distance
     longitude_delta = radius / lon_degree_distance
@@ -167,12 +171,37 @@ def check_trucks(pay, distance, type, longitude, latitude): #input is load info
                 max_price = pay
     return truck_match, max_price
 
+def find_waiting_loads(data):
+    '''Constanly runs to update the wait time of each of the loads that have not been taken
+    '''
+    search_box = (
+        -180,
+        -90,
+        180,
+        90
+    )
+    for load in loads.intersect(search_box):
+        load.calculate_wait_time(data["timestamp"])
+        if load.wait_time > 3600:
+            #if no truck has been able to pick up the load in one hour
+            #find the closest truck and notify them
+
+
+            load.wait_time = 0 #notified a truck, reset wait time
+            print("THIS LOAD IS WAITING")
+
 def on_message(client, userdata, message): 
     '''Run when an update is recieved
     '''
     try:
         data = json.loads(message.payload.decode())
-        update_position(data)
+
+        thread1 = threading.Thread(target=update_position(data))
+        thread2 = threading.Thread(target=find_waiting_loads(data))
+        thread1.start()
+        thread2.start()
+        thread1.join()
+        thread2.join()
                         
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
@@ -193,3 +222,5 @@ def run():
     
 if __name__ == '__main__':
     run()
+    for truck in unique_trucks:
+        print(truck, ";", unique_trucks[truck].notifications)
