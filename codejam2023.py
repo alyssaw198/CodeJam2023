@@ -185,7 +185,7 @@ def on_message(client, userdata, message):
         for truck in unique_trucks:
             if unique_trucks[truck].notifications:
                 print(truck, ";", unique_trucks[truck].notifications)
-        client.disconnect()
+        client.loop_stop()
 
 def run():
     client = mqtt_client.Client(client_id)
